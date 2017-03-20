@@ -4,6 +4,26 @@
 Idea from: [iOS GPUImage framework](https://github.com/BradLarson/GPUImage)
 Base on: [Android GPUImage framework](https://github.com/CyberAgent/android-gpuimage)
 
+## Setup
+**Step 1.** Add the JitPack repository to your build file
+
+Gradle
+Add it in your root build.gradle at the end of repositories:
+```gradle
+allprojects {
+   repositories {
+      maven { url 'https://jitpack.io' }
+   }
+}
+```
+
+**Step 2.** Add the dependency
+```gradle
+dependencies {
+   compile 'com.github.proghjy:android-gpuimage-videorecording:v1.4.2'
+}
+```
+
 ## Requirements
 * Android 4.3 or higher (OpenGL ES 2.0)
 

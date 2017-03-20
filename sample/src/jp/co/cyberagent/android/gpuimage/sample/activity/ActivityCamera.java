@@ -23,7 +23,6 @@ import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.Parameters;
 import android.net.Uri;
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -40,6 +39,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import jp.co.cyberagent.android.gpuimage.GLTextureView;
 import jp.co.cyberagent.android.gpuimage.GPUImage;
 import jp.co.cyberagent.android.gpuimage.GPUImage.OnPictureSavedListener;
 import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
@@ -73,7 +73,7 @@ public class ActivityCamera extends Activity implements OnSeekBarChangeListener,
         findViewById(R.id.button_record).setOnClickListener(this);
 
         mGPUImage = new GPUImage(this);
-        mGPUImage.setGLSurfaceView((GLSurfaceView) findViewById(R.id.surfaceView));
+        mGPUImage.setGLTextureView((GLTextureView) findViewById(R.id.surfaceView));
 
         mMovieWriter = new GPUImageMovieWriter();
         mGPUImage.setFilter(mMovieWriter);
@@ -191,8 +191,8 @@ public class ActivityCamera extends Activity implements OnSeekBarChangeListener,
                         data = null;
                         Bitmap bitmap = BitmapFactory.decodeFile(pictureFile.getAbsolutePath());
                         // mGPUImage.setImage(bitmap);
-                        final GLSurfaceView view = (GLSurfaceView) findViewById(R.id.surfaceView);
-                        view.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+                        final GLTextureView view = (GLTextureView) findViewById(R.id.surfaceView);
+                        view.setRenderMode(GLTextureView.RENDERMODE_WHEN_DIRTY);
                         mGPUImage.saveToPictures(bitmap, "GPUImage",
                                 System.currentTimeMillis() + ".jpg",
                                 new OnPictureSavedListener() {
@@ -202,7 +202,7 @@ public class ActivityCamera extends Activity implements OnSeekBarChangeListener,
                                             uri) {
                                         pictureFile.delete();
                                         camera.startPreview();
-                                        view.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+                                        view.setRenderMode(GLTextureView.RENDERMODE_CONTINUOUSLY);
                                     }
                                 });
                     }

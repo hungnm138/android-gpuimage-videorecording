@@ -32,14 +32,13 @@ import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.graphics.Bitmap;
-import android.opengl.GLSurfaceView;
 import android.util.Log;
 
 public class PixelBuffer {
     final static String TAG = "PixelBuffer";
     final static boolean LIST_CONFIGS = false;
 
-    GLSurfaceView.Renderer mRenderer; // borrow this interface
+    GLTextureView.Renderer mRenderer; // borrow this interface
     int mWidth, mHeight;
     Bitmap mBitmap;
 
@@ -89,7 +88,7 @@ public class PixelBuffer {
         mThreadOwner = Thread.currentThread().getName();
     }
 
-    public void setRenderer(final GLSurfaceView.Renderer renderer) {
+    public void setRenderer(final GLTextureView.Renderer renderer) {
         mRenderer = renderer;
 
         // Does this thread own the OpenGL context?

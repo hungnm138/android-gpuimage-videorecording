@@ -25,12 +25,10 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.PixelFormat;
 import android.hardware.Camera;
 import android.media.ExifInterface;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
-import android.opengl.GLSurfaceView;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
@@ -42,7 +40,6 @@ import android.view.WindowManager;
 import java.io.*;
 import java.net.URL;
 import java.util.List;
-import java.util.concurrent.Semaphore;
 
 /**
  * The main accessor for GPUImage functionality. This class helps to do common
@@ -51,7 +48,7 @@ import java.util.concurrent.Semaphore;
 public class GPUImage {
     private final Context mContext;
     private final GPUImageRenderer mRenderer;
-    private GLSurfaceView mGlSurfaceView;
+    private GLTextureView mGLTextureView;
     private GPUImageFilter mFilter;
     private Bitmap mCurrentBitmap;
     private ScaleType mScaleType = ScaleType.CENTER_CROP;
@@ -86,18 +83,18 @@ public class GPUImage {
     }
 
     /**
-     * Sets the GLSurfaceView which will display the preview.
+     * Sets the GLTextureView which will display the preview.
      *
-     * @param view the GLSurfaceView
+     * @param view the GLTextureView
      */
-    public void setGLSurfaceView(final GLSurfaceView view) {
-        mGlSurfaceView = view;
-        mGlSurfaceView.setEGLContextClientVersion(2);
-        mGlSurfaceView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-        mGlSurfaceView.getHolder().setFormat(PixelFormat.RGBA_8888);
-        mGlSurfaceView.setRenderer(mRenderer);
-        mGlSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-        mGlSurfaceView.requestRender();
+    public void setGLTextureView(final GLTextureView view) {
+        mGLTextureView = view;
+        mGLTextureView.setEGLContextClientVersion(2);
+        mGLTextureView.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+        mGLTextureView.setOpaque(false);
+        mGLTextureView.setRenderer(mRenderer);
+        mGLTextureView.setRenderMode(GLTextureView.RENDERMODE_WHEN_DIRTY);
+        mGLTextureView.requestRender();
     }
 
     /**
@@ -115,8 +112,8 @@ public class GPUImage {
      * Request the preview to be rendered again.
      */
     public void requestRender() {
-        if (mGlSurfaceView != null) {
-            mGlSurfaceView.requestRender();
+        if (mGLTextureView != null) {
+            mGLTextureView.requestRender();
         }
     }
 
@@ -139,7 +136,7 @@ public class GPUImage {
      */
     public void setUpCamera(final Camera camera, final int degrees, final boolean flipHorizontal,
             final boolean flipVertical) {
-        mGlSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+        mGLTextureView.setRenderMode(GLTextureView.RENDERMODE_CONTINUOUSLY);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
             setUpCameraGingerbread(camera);
         } else {
@@ -279,7 +276,7 @@ public class GPUImage {
      * @return the bitmap with filter applied
      */
     public Bitmap getBitmapWithFilterApplied(final Bitmap bitmap) {
-        if (mGlSurfaceView != null) {
+        if (mGLTextureView != null) {
             mRenderer.deleteImage();
             mRenderer.runOnDraw(new Runnable() {
 

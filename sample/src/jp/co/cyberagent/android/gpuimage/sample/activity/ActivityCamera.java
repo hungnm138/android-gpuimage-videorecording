@@ -165,48 +165,46 @@ public class ActivityCamera extends Activity implements OnSeekBarChangeListener,
         for (Camera.Size size : params.getSupportedPictureSizes()) {
             Log.i("ASDF", "Supported: " + size.width + "x" + size.height);
         }
-        mCamera.mCameraInstance.takePicture(null, null,
-                new Camera.PictureCallback() {
+        mCamera.mCameraInstance.takePicture(null, null, new Camera.PictureCallback() {
 
-                    @Override
-                    public void onPictureTaken(byte[] data, final Camera camera) {
+            @Override
+            public void onPictureTaken(byte[] data, final Camera camera) {
 
-                        final File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
-                        if (pictureFile == null) {
-                            Log.d("ASDF",
-                                    "Error creating media file, check storage permissions");
-                            return;
-                        }
+                final File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+                if (pictureFile == null) {
+                    Log.d("ASDF",
+                            "Error creating media file, check storage permissions");
+                    return;
+                }
 
-                        try {
-                            FileOutputStream fos = new FileOutputStream(pictureFile);
-                            fos.write(data);
-                            fos.close();
-                        } catch (FileNotFoundException e) {
-                            Log.d("ASDF", "File not found: " + e.getMessage());
-                        } catch (IOException e) {
-                            Log.d("ASDF", "Error accessing file: " + e.getMessage());
-                        }
+                try {
+                    FileOutputStream fos = new FileOutputStream(pictureFile);
+                    fos.write(data);
+                    fos.close();
+                } catch (FileNotFoundException e) {
+                    Log.d("ASDF", "File not found: " + e.getMessage());
+                } catch (IOException e) {
+                    Log.d("ASDF", "Error accessing file: " + e.getMessage());
+                }
 
-                        data = null;
-                        Bitmap bitmap = BitmapFactory.decodeFile(pictureFile.getAbsolutePath());
-                        // mGPUImage.setImage(bitmap);
-                        final GLTextureView view = (GLTextureView) findViewById(R.id.surfaceView);
-                        view.setRenderMode(GLTextureView.RENDERMODE_WHEN_DIRTY);
-                        mGPUImage.saveToPictures(bitmap, "GPUImage",
-                                System.currentTimeMillis() + ".jpg",
-                                new OnPictureSavedListener() {
+                data = null;
+                Bitmap bitmap = BitmapFactory.decodeFile(pictureFile.getAbsolutePath());
+                // mGPUImage.setImage(bitmap);
+                final GLTextureView view = (GLTextureView) findViewById(R.id.surfaceView);
+                view.setRenderMode(GLTextureView.RENDERMODE_WHEN_DIRTY);
+                mGPUImage.saveToPictures(bitmap, "GPUImage",
+                        System.currentTimeMillis() + ".jpg",
+                        new OnPictureSavedListener() {
 
-                                    @Override
-                                    public void onPictureSaved(final Uri
-                                            uri) {
-                                        pictureFile.delete();
-                                        camera.startPreview();
-                                        view.setRenderMode(GLTextureView.RENDERMODE_CONTINUOUSLY);
-                                    }
-                                });
-                    }
-                });
+                            @Override
+                            public void onPictureSaved(final Uri uri) {
+                                pictureFile.delete();
+                                camera.startPreview();
+                                view.setRenderMode(GLTextureView.RENDERMODE_CONTINUOUSLY);
+                            }
+                        });
+            }
+        });
     }
 
     public static final int MEDIA_TYPE_IMAGE = 1;
@@ -246,8 +244,7 @@ public class ActivityCamera extends Activity implements OnSeekBarChangeListener,
     }
 
     private void switchFilterTo(final GPUImageFilter filter) {
-        if (mFilter == null
-                || (filter != null && !mFilter.getClass().equals(filter.getClass()))) {
+        if (mFilter == null || (filter != null && !mFilter.getClass().equals(filter.getClass()))) {
             mFilter = filter;
 
             GPUImageFilterGroup filters = new GPUImageFilterGroup();

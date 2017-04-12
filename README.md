@@ -20,7 +20,7 @@ allprojects {
 **Step 2.** Add the dependency
 ```gradle
 dependencies {
-   compile 'com.github.proghjy:android-gpuimage-videorecording:v1.4.2'
+   compile 'com.github.hungnm138:android-gpuimage-videorecording:v1.4.4'
 }
 ```
 

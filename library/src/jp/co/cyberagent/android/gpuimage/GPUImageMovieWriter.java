@@ -57,7 +57,7 @@ public class GPUImageMovieWriter extends GPUImageFilter {
             // Draw on encoder surface
             mCodecInput.makeCurrent();
             super.onDraw(textureId, cubeBuffer, textureBuffer);
-            mCodecInput.swapBuffers();
+            try { mCodecInput.swapBuffers(); } catch(Exception e) {e.printStackTrace();}
             mVideoEncoder.frameAvailableSoon();
         }
 
